@@ -7,6 +7,8 @@
 </template>
 <script>
 import Vue from 'vue';
+import fs from 'fs';
+
 export default {
   name: 'dynamic-component',
   props: ['data', 'type'],
@@ -19,11 +21,20 @@ export default {
     loadData: function () {
       this.axios.get("http://localhost:3000")
       .then((response) => {
-        this.component = Vue.component("blah", {
-          template: response.data
-        })
+        if(this.last != response.data){
+          this.last = response.data;
+          this.component = Vue.component("blah", {
+            template: response.data
+          });
+        }
       }).catch(e => {
-            return import("./templates/default.vue")
+        this.template ='<img src="http://localhost:8080/12urenloop.png" style="height: 100%; width: auto"/>';
+          if(this.last != this.template){
+          this.last = this.template;
+            this.component = Vue.component("blah", {
+              template: this.template
+            });
+          }
       });
     }
   },
@@ -31,7 +42,7 @@ export default {
     this.loadData();
     setInterval(function () {
       this.loadData();
-    }.bind(this), 1000);
+    }.bind(this), 2000);
     /*
       this.loader()
           .then(() => {
