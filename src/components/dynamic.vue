@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     loadData: function () {
-      this.axios.get("http://localhost:3000")
+      this.axios.get("http://10.0.5.69:3000")
       .then((response) => {
         if(this.last != response.data){
           this.last = response.data;
